@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SmSscmServiceApplication {
+public class DemoServiceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SmSscmServiceApplication.class, args);
+        SpringApplication.run(DemoServiceApplication.class, args);
     }
 
 }

@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sm-sscm-service
+spec:
+  selector:
+    app: sm-sscm-service
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: ClusterIP
+
+# svc -> type : clusterIP -> k8s 내부에서 내부로 호출하는 목적, LoadBalancer, Nodeport -> 단일 1개만 띄울 때
+# LoadBalancer 외부 접속 가능함 -> cloud 서비스만 사용가능
+# ingress -> nginx -> 외부접속가능
+
+# master -> worker node
+# k8s 설치가 필요 -> ip, worker node ip
+

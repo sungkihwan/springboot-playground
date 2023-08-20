@@ -1,0 +1,28 @@
+version: '3'
+services:
+  sscm-service:
+    image: singahu/sscm-service:latest
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+    networks:
+      - service-network
+
+  fcm-service:
+    image: singahu/fcm-service:latest
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+    networks:
+      - service-network
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "8000:80"
+    volumes:
+      - ./nginx-dev.conf:/etc/nginx/nginx.conf
+    networks:
+      - service-network
+
+networks:
+  service-network:
+    driver: bridge

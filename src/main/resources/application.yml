@@ -1,0 +1,65 @@
+server:
+  port: 3888
+
+  error:
+    include-stacktrace: NEVER
+
+spring:
+  application:
+    name: sm-sscm-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://211.43.13.169:3306/kspia_sscm_op?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: sungkihwan
+    password: Sungkihwan1!
+  jpa:
+    open-in-view: true
+    hibernate:
+#      ddl-auto: validate
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+      use-new-id-generator-mappings: false
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+      dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+
+  hibernate:
+    format-sql: false
+    dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    default-batch-fetch-size: 500
+
+token:
+  expiration_time: 864000000
+  secret: user_token_native_user_service_default
+
+url:
+  gateway: http://localhost:8001
+  sscm: http://localhost:3888
+  fcm: http://localhost:3889
+  mtd: http://localhost:3887
+
+logging:
+  level:
+    root: WARN
+    org.springframework.cloud.config: DEBUG
+    web: debug
+#    sql: debug
+    cache: debug
+    bootstrap: trace
+#    org.hibernate.SQL: debug
+#    org.hibernate.type.descriptor.sql: trace
+    org.springframework:
+      security.oauth2.provider.endpoint: WARN
+      data: DEBUG
+      web:
+        servlet.handler: info
+        filter.CommonsRequestLoggingFilter: debug
+      security: debug
+    redis.clients: DEBUG
+
+
+
+

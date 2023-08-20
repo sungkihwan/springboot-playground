@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: smv-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - host: localhost
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/sm-sscm-service"
+            backend:
+              service:
+                name: sm-sscm-service
+                port:
+                  number: 80
+          - pathType: Prefix
+            path: "/sm-fcm-service"
+            backend:
+              service:
+                name: sm-fcm-service
+                port:
+                  number: 80

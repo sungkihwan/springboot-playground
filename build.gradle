@@ -1,0 +1,127 @@
+// querydsl 버전 변수
+buildscript {
+	ext {
+		queryDslVersion = "5.0.0"
+		springCloudVersion = '2021.0.5'
+	}
+}
+
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '2.7.10'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+group = 'com.kspia'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+	mavenCentral()
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
+
+	// entity to dto 매핑
+	implementation 'org.modelmapper:modelmapper:3.1.0'
+
+	// spring cloud 관련 라이브러리
+//	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+//	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+//	implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
+//	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+//	implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp'
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+//	implementation "org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j"
+
+	implementation 'org.apache.commons:commons-lang3:3.12.0'
+
+	// 디비 커넥션
+	implementation 'org.mariadb.jdbc:mariadb-java-client:2.7.2'
+	implementation 'mysql:mysql-connector-java:8.0.30'
+//	runtimeOnly 'com.mysql:mysql-connector-j'
+
+	// querydsl
+	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
+
+	// 엑셀
+	implementation 'org.apache.poi:poi:5.2.2'
+	implementation 'org.apache.poi:poi-ooxml:5.2.2'
+
+	// 로그
+	implementation 'org.apache.logging.log4j:log4j-core:2.17.1'
+	implementation 'org.apache.logging.log4j:log4j-api:2.17.1'
+
+	// 하이버네이트 타입 (Json data 사용시 편리한 라이브러리 -> 커스텀 시리얼라이저 만들 필요 없음)
+	implementation 'com.vladmihalcea:hibernate-types-52:2.21.1'
+
+	// jwt
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+	// 롬복
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	// 테스트
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+//	def isMacOs = { ->
+//		return System.properties['os.name'].toLowerCase().contains('mac')
+//	}
+//
+//	if (isMacOs()) {
+//		dependencies {
+//			runtimeOnly 'io.netty:netty-resolver-dns-native-macos:4.1.76.Final:osx-aarch_64'
+//		}
+//	}
+}
+
+// querydsl 추가 시작
+def querydslDir = "$buildDir/generated/querydsl"
+def querydslDir2 = "$buildDir/generated"
+
+querydsl {
+	jpa = true
+	querydslSourcesDir = querydslDir
+}
+sourceSets {
+	main.java.srcDir querydslDir
+}
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+	querydsl.extendsFrom compileClasspath
+}
+compileQuerydsl {
+	options.annotationProcessorPath = configurations.querydsl
+}
+// querydsl 추가 끝
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

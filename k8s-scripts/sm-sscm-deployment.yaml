@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sm-sscm-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sm-sscm-service
+  template:
+    metadata:
+      labels:
+        app: sm-sscm-service
+    spec:
+      containers:
+        - name: sm-sscm-service
+          image: singahu/sscm-service:latest
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              memory: "1024Mi"
+              cpu: "2"
+            requests:
+              memory: "256Mi"
+              cpu: "1"
+      terminationGracePeriodSeconds: 60
